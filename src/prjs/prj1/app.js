@@ -195,7 +195,7 @@ function setup(shaders) {
     bg_u_scale_loc = gl.getUniformLocation(quad_program, "u_scale");
     bg_u_center_loc = gl.getUniformLocation(quad_program, "u_center");
     bg_u_world_half_width_loc = gl.getUniformLocation(quad_program, "u_world_half_width");
-    bg_u_sites_pos = gl.getUniformLocation(quad_program,"u_sites_position");
+    bg_u_sites_pos = gl.getUniformLocation(quad_program,"u_site_position");
     bg_u_n_sites_pos = gl.getUniformLocation(quad_program,"u_n_sites");
     bg_u_metric_pos = gl.getUniformLocation(quad_program,"u_metric");
     gl.vertexAttribPointer(bg_a_position, 2, gl.FLOAT, false, 0, 0);
@@ -230,10 +230,10 @@ function animate(timestamp) {
     gl.useProgram(quad_program);
     gl.bindVertexArray(quad_vao);
 
-    //gl.uniform2fv(bg_u_center_loc, u_center);
-    //gl.uniform1f(bg_u_world_half_width_loc, WORLD_HALF_WIDTH);
-    //gl.uniform1f(bg_u_scale_loc, scale);
-    gl.uniform2fv(bg_u_sites_pos,sites);
+    gl.uniform2fv(bg_u_center_loc, u_center);
+    gl.uniform1f(bg_u_world_half_width_loc, WORLD_HALF_WIDTH);
+    gl.uniform1f(bg_u_scale_loc, scale);
+    gl.uniform2fv(bg_u_sites_pos,flatten(sites));
     gl.uniform1i(bg_u_n_sites_pos,sites.length);
     gl.uniform1i(bg_u_metric_pos,metric);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
