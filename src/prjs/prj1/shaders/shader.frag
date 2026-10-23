@@ -5,7 +5,10 @@ precision mediump float;
 out vec4 outColor;
 
 void main() {
-    vec2 c = gl_PointCoord - 0.5;
-    if (dot(c, c) > 0.25) discard;     // 0.5 * 0.5 = 0.25
-    outColor = vec4(0.0, 0.0, 0.0, 1.0);
+    float d = length(gl_PointCoord - 0.5);   // 0 no centro, 0.5 na borda
+    if (d > 0.5) discard;                    // fora do círculo
+
+    // interior branco, anel preto por fora
+    vec3 color = d < 0.3 ? vec3(1.0) : vec3(0.0);
+    outColor = vec4(color, 1.0);
 }
