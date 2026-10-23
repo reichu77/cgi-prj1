@@ -9,6 +9,6 @@ in float v_dist;
 out vec4 color;
 
 void main() {
-    float shade = mix(1.0, 0.3, clamp(v_dist / max_dist, 0.0, 1.0));    // o mesmo sombreamento da técnica 1
+    float shade = mix(1.0, 0.3, clamp(v_dist / max_dist, 0.0, 1.0));    
     color = vec4(v_color * shade, 1.0);
 }

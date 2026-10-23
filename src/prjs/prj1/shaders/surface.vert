@@ -9,7 +9,7 @@
 
 const int MAX_SITES = 32;
 const float PI = 3.14159265;
-const int N_LADOS = 62;     // cone: 64 vértices = 1 centro + 63 na borda (o último repete o primeiro)
+const int N_LADOS = 62;     // cone: 64 vértices = 1 centro + 63 na borda (o último repete o primeiro) pelo menos parece funcionar
 
 uniform vec2 u_site_position[MAX_SITES];
 uniform vec3 u_site_color[MAX_SITES];
@@ -38,9 +38,7 @@ void main() {
     vec2 half_size = vec2(u_world_half_width, u_world_half_width / u_aspect) * u_scale;
     vec2 site = u_site_position[gl_InstanceID];
 
-    // raio da superfície: tem de chegar a todo o canvas visível. Um círculo de raio
-    // 'a' cabe dentro do quadrado de raio a, do losango de raio a*sqrt(2) e do
-    // polígono de raio a/cos(PI/N_LADOS)
+    
     float a = alcance(site, half_size);
     float r;
     if(u_metric == 0)
@@ -53,7 +51,7 @@ void main() {
     vec2 p;
     float h;
     if(gl_VertexID == 0) {
-        p = site;       // centro: em cima do site, distância 0
+        p = site;       
         h = 0.0f;
     } else {
         int k = gl_VertexID - 1;
@@ -66,17 +64,15 @@ void main() {
         else
             dir = quadrado[k % 4];
         p = site + r * dir;
-        h = r;          // todos os pontos da borda estão à distância r do site
+        h = r;          
     }
 
-    // a profundidade tem de usar a mesma escala em todos os sites, senão não dá
-    // para comparar superfícies diferentes: divide-se pela maior altura possível
+    
     float h_max = 0.0f;
     for(int i = 0; i < u_n_sites; i++)
         h_max = max(h_max, alcance(u_site_position[i], half_size));
-    h_max *= 2.0f;      // maior do que qualquer r acima (sqrt(2) e 1/cos(PI/62) < 2)
-
+    h_max *= 2.0f;      
+    
     v_color = u_site_color[gl_InstanceID];
     v_dist = h;
-    gl_Position = vec4((p - u_center) / half_size, h / h_max * 2.0f - 1.0f, 1.0f);   // h em [0, h_max] -> z em [-1, 1]
-}
+    gl_Position = vec4((p - u_center) / half_size, h / h_max * 2.0f - 1.0f, 1.0f);  
