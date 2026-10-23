@@ -310,12 +310,12 @@ function animate(timestamp) {
         gl.uniform1i(sur_u_metric_loc,metric);
         if (sites.length > 0) gl.uniform3fv(sur_u_sites_col_loc,flatten(sites_col));    //array vazio dá erro no WebGL
 
-        if(metric != 1 && metric != 2) {
-            gl.drawArraysInstanced(gl.TRIANGLE_FAN,0,64,sites.length);
-        gl.enable(gl.DEPTH_TEST);}
+        gl.enable(gl.DEPTH_TEST);       // só as superfícies entram no depth test
+        if (metric == 0)
+            gl.drawArraysInstanced(gl.TRIANGLE_FAN, 0, 64, sites.length);  // cone: centro + 63 na borda
         else
-            gl.drawArraysInstanced(gl.TRIANGLE_FAN,0,6,sites.length); // penso q tem de ser 6 
-        gl.enable(gl.DEPTH_TEST);
+            gl.drawArraysInstanced(gl.TRIANGLE_FAN, 0, 6, sites.length);   // pirâmide: centro + 4 cantos + repetir o 1.º
+        gl.disable(gl.DEPTH_TEST);      // os marcadores ficam sempre por cima
     }
 
     gl.useProgram(sites_program);
